@@ -2,6 +2,8 @@
 
 当使用inline-block，并使用百分比宽度使元素并排时；可能会由于标签之间的 换行/空格 原因使得块元素间产生间隙而使得不能容纳在同一行
 
+行内元素可以设置水平方向上的margin和padding；但不能设置垂直方向上的。
+
 设为绝对定位的元素是相对于“已定位”的祖先元素，如果该子元素的祖先元素都未设置position那么就是相对于根元素<html>进行定位；所以对于需要绝对定位的子元素一般会给其父元素设position:relative
 
 子元素没有设置定位，其尺寸设置百分比时参照的对象是 该子元素的父级元素；
@@ -16,17 +18,20 @@
 
 ### 清除浮动：
 - 在浮动元素最后添加个空标签并设置clear:botn（这样父元素就可以包裹住所有浮动元素了）
-- 使父元素触发BFC，从而包含住所有浮动块（如设置overflow:hidden，父元素也设置浮动等）
 - 给父元素添加clearfix类，即这样实现：
 .clearfix:after {
-	content: ".";display:block;clear:both;height:0;visibility:hidden;
+	content: ".";
+	display:block;
+	clear:both;
+	height:0;
+	visibility:hidden;
 }
 
 ### 三列布局
 
 （圣杯布局）左右两列固定宽度，中间自适应的两种方法：
 1. 使用绝对定位，左右两列定位到父元素左右边框，中间列根据左右列宽度设置margin
-2. 将左右列向左右浮动，**但注意中间列在html中要写在左右列之后**
+2. 将左右列向左右浮动，中间的块触发BFC。 **但注意中间列在html中要写在左右列之后**
 
 ### 轮播图
 
@@ -83,7 +88,7 @@
 
         //图片位移函数
         function forward(head,tail) {
-            let hl = 0, tl = 100, interval = 2; //interval为每帧的滑动百分比距离；则每秒的帧数即 1000ms/(100/interval)
+            let hl = 0, tl = 100, interval = 2; //interval为每帧的滑动百分比距离；则每秒的帧数即 (100/interval)
             let timer = setInterval(function(){
                 hl -= interval;
                 tl -= interval;
