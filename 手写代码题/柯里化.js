@@ -6,8 +6,8 @@ function curry(fn) {
 
     return function inner(...args) {
         return args.length >= paramNums
-        ?   fn.apply(this, args)
-        :   function(...args2) {
+        ? fn.apply(this, args)
+        : function(...args2) {
             return inner.apply(this, [...args, ...args2])
         }
     }
