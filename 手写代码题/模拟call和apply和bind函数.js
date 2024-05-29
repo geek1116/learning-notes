@@ -2,7 +2,7 @@ Function.prototype.myCall = function(ctx, ...args) {
     const context = ctx || window
 
     if(typeof this !== 'function') {
-        throw new TypeError('Call object is not a Function')
+        throw new TypeError('Called object is not a Function')
     }
     // 给context添加一个属性，以此来改变函数执行时的this指向
     context.fn = this
@@ -18,7 +18,7 @@ Function.prototype.myApply = function(ctx, args) {
     const context = ctx || window
 
     if(typeof this !== 'function') {
-        throw new TypeError('Call object is not a Function')
+        throw new TypeError('Called object is not a Function')
     }
     // 给context添加一个属性，以此来改变函数执行时的this指向
     context.fn = this
@@ -36,7 +36,7 @@ Function.prototype.myApply = function(ctx, args) {
 
 Function.prototype.myBind = function(ctx, ...args) {
     if(typeof this !== 'function') {
-        throw new TypeError('Call object is not a Function')
+        throw new TypeError('Called object is not a Function')
     }
 
     const _this = this
@@ -46,6 +46,6 @@ Function.prototype.myBind = function(ctx, ...args) {
             return new _this(...args, ...args2)
         }
 
-        return _this.apply(ctx, args)
+        return _this.call(ctx, ...args, ...args2)
     }
 }

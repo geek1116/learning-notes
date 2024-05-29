@@ -12,8 +12,10 @@ function shallowCopy(obj) {
 
     const newObj = obj instanceof Array ? [] : {}
     // 遍历obj，判断是obj自身的属性才拷贝
-    for(let key of obj) {
-        newObj[key] = obj[key]
+    for(let key in obj) {
+        if(obj.hasOwnProperty(key)) {
+            newObj[key] = obj[key]
+        }
     }
 
     return newObj
@@ -35,8 +37,10 @@ function cloneDeep(obj) {
         return obj.map(cloneDeep)   // 对数组每个元素调用cloneDeep来返回一个新数组
     } else if(obj && typeof obj === 'object') {
         const newObj = {}
-        for(let key of obj) {
-            newObj[key] = cloneDeep(obj[key])
+        for(let key in obj) {
+            if(obj.hasOwnProperty(key)) {
+                newObj[key] = cloneDeep(obj[key])
+            }
         }
 
         return newObj
