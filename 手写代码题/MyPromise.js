@@ -11,7 +11,7 @@ class MyPromise {
             
             this.status = 'resolved'
             this.resolvedValue = val
-            this.flushCallback()
+            this.resolvedCallback.forEach(cb => cb(this.resolvedValue))
         }
 
         const reject = (res) => {
@@ -19,7 +19,7 @@ class MyPromise {
 
             this.status = 'rejected'
             this.rejectedRes = res
-            this.flushCallback()
+            this.rejectedCallback.forEach(cb => cb(this.rejectedRes))
         }
 
         try {
@@ -29,17 +29,8 @@ class MyPromise {
         }
     }
 
-    flushCallback() {
-        if(this.status === 'resolved') {
-            this.resolvedCallback.forEach(cb => cb(this.resolvedValue))
-        }
-
-        if(this.status === 'rejected') {
-            this.rejectedCallback.forEach(cb => cb(this.rejectedRes))
-        }
-    }
-
     then(resolveFn, rejectFn) {
+        /* 给予默认回调 */
         resolveFn = typeof resolveFn === 'function' ? resolveFn : val => val
         rejectFn = typeof rejectFn === 'function' ? rejectFn : res => { throw res }
 
@@ -75,35 +66,57 @@ class MyPromise {
     }
 
     catch(catchFn) {
-        // todo
+        return this.then(undefined, catchFn)
     }
 }
 
-const p = new MyPromise(function(resolve, reject) {
-    console.log('promise start')
-    resolve('man')
-    //reject('no!')
+
+
+new MyPromise((resolve, reject) => {
+    console.log('1')
+    resolve('hello~')
+    //reject('man!')
 
 }).then(
-    (val) => {
-        console.log('hi~ ', val)
-        return 'val in then1'
+    res => {
+        console.log('3 ', res)
+        return 'world~'
+        //throw new Error('custom error')
+    },
+    res => {
+        console.log('33 ', res)
+        return 'what can i say!'
+        //throw new Error('custom error')
+    }
 
-    }, (res) => {
-        console.log('555~ ', res)
-    }
-).then(
-    (val) => {
-        console.log('hi~ ', val)
-    }
-)
+).catch(res => {
+    console.log('4')
+    console.log('catch: ', res)
+
+}).then(res => {
+    console.log('5 ', res)
+})
+
+console.log('2')
+
+
 
 /* new Promise((resolve, reject) => {
-    throw new Error('custom error')
+    reject('man!')
+    // throw new Error('custom error')
 
-    resolve('man!')
-
-}).then((val) => console.log(val), res => console.log('err: ', res))
+}).then(
+    (val) => console.log(val),
+    res => {
+        throw new Error('custom error')
+        console.log('reject: ', res)
+    }
+).then(
+    (val) => console.log(val),
+    res => {
+        console.log('reject2: ', res)
+    }
+)
 .catch(err => {
     console.log('catch~', err)
 }) */
