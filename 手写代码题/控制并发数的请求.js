@@ -10,8 +10,15 @@ function getData(data) {
     })
 
     return p.then(() => {
-        fetch(data).then(res => {
+        return fetch(data).then(res => {
             return res
+
+        }).catch(err => {
+            throw err
+
+        }).finally(() => {
+            --currentCount
+            flushPool()
         })
     })
 }
@@ -19,7 +26,11 @@ function getData(data) {
 function flushPool() {
     if(currentCount >= MAX_SYNC_COUNT) return
 
-    // todo
+    while(currentCount < MAX_SYNC_COUNT && reqPool.length > 0) {
+        const resolve = reqPool.shift()
+        resolve()
+        ++currentCount
+    }
 }
 
 
